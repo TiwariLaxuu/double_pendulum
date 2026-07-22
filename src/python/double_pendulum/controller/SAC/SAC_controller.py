@@ -14,9 +14,11 @@ class SACController(AbstractController):
     def get_control_output_(self, x, t=None):
         if self.scaling:
             obs = self.dynamics_func.normalize_state(x)
-            action = self.model.predict(obs)
+            action, _state = self.model.predict(obs, deterministic=True)
+            print("action", action) 
             u = self.dynamics_func.unscale_action(action)
         else:
-            action = self.model.predict(x)
+            action, _state = self.model.predict(x, deterministic=True)
+            print("action", action)
             u = self.dynamics_func.unscale_action(action)
         return u
